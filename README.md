@@ -1,66 +1,50 @@
-## Foundry
+# 🔐 Price-Locked ETH Vault
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A **single-user ETH vault** smart contract that locks a user's deposited ETH and only allows withdrawal once the total USD value of the vault exceeds a **minimum threshold**.
 
-Foundry consists of:
+---
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 🧩 Overview
 
-## Documentation
+This contract enables a one-at-a-time **exclusive ETH vault** that:
 
-https://book.getfoundry.sh/
+- Accepts ETH deposits from **a single user**.
+- **Locks** the deposited ETH — no one else can use the vault until it's withdrawn.
+- Uses a **Chainlink ETH/USD price feed** to determine when the ETH value has appreciated.
+- Only allows withdrawal **when the USD value of the vault meets or exceeds a specified threshold**.
 
-## Usage
+---
 
-### Build
+## 🛠️ Features
 
-```shell
-$ forge build
-```
+- ✅ **Single user access**: Only one user can interact with the vault at a time.
+- 🔒 **Lock mechanism**: ETH is locked to that user until they withdraw.
+- 💵 **USD valuation**: ETH value is converted to USD using a Chainlink oracle.
+- ⛔ **Withdraw blocked** if value is below a set USD minimum.
+- 🔁 Vault **unlocks after withdrawal**, allowing the next user to deposit.
 
-### Test
+---
 
-```shell
-$ forge test
-```
+## 📄 Contract Flow
 
-### Format
+1. **Deposit ETH**  
+   - First user sends ETH to the contract.  
+   - Contract locks itself to that user's address.
 
-```shell
-$ forge fmt
-```
+2. **Check Vault Value (USD)**  
+   - The vault uses Chainlink’s ETH/USD price feed to calculate total USD value of ETH held.
 
-### Gas Snapshots
+3. **Withdraw ETH**  
+   - Only the locked user can withdraw.  
+   - Withdrawal only allowed if the vault's USD value ≥ `MINIMUM_VAULT_USD_WITHDRAWAL_VALUE`.
 
-```shell
-$ forge snapshot
-```
+4. **Reset**  
+   - After withdrawal, the vault is open to new users again.
 
-### Anvil
+---
 
-```shell
-$ anvil
-```
+## 🔧 Constructor Parameters
 
-### Deploy
+- `AggregatorV3Interface _priceFeed`: Chainlink price feed used to fetch ETH/USD price.
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+---
