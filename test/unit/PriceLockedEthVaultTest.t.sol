@@ -157,6 +157,10 @@ contract PriceLockedEthVaultTest is Test {
         vm.stopPrank();
     }
 
+    /////////////////////////////
+    //      Modifier Tests     //
+    /////////////////////////////
+
     function testVaultCannotBeCalledByNonOwner()
         public
         userDepositAndLocksVault
