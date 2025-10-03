@@ -6,7 +6,7 @@ import {PriceLockedEthVault} from "src/PriceLockedEthVault.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
 
 contract DeployPriceLockedEthVault is Script {
-    function deployContract() internal returns (PriceLockedEthVault) {
+    function deployContract() public returns (PriceLockedEthVault) {
         HelperConfig helperConfig = new HelperConfig();
         address ethUsdPriceFeed = helperConfig.activeNetworkConfig();
 

@@ -50,9 +50,16 @@ contract PriceLockedEthVault {
         _;
     }
 
+    //Function Pattern: Checks, Effects, Interactions
+
     function depositEth() external payable {
         if (msg.value < MINIMUM_ETH) {
             revert PriceLockedEthVault__EthDepositedIsNotSufficient();
+        }
+        if (
+            s_locked == VaultState.LOCKED && s_vaultUser != address(msg.sender)
+        ) {
+            revert PriceLockedEthVault__VaultIsCurrentlyBeingInUsedByAnotherUser();
         }
 
         if (s_locked != VaultState.LOCKED) {
@@ -60,10 +67,8 @@ contract PriceLockedEthVault {
             s_locked = VaultState.LOCKED;
             emit VaultLocked();
             emit DepositedIntoVault(msg.value);
-        } else if (s_vaultUser == address(msg.sender)) {
-            emit DepositedIntoVault(msg.value);
         } else {
-            revert PriceLockedEthVault__VaultIsCurrentlyBeingInUsedByAnotherUser();
+            emit DepositedIntoVault(msg.value);
         }
     }
 
@@ -111,5 +116,9 @@ contract PriceLockedEthVault {
 
     function getPriceFeedVersion() public view returns (uint256) {
         return s_priceFeed.version();
+    }
+
+    function getMinimumVaultUsdWithdrawlValue() public pure returns (uint256) {
+        return MINIMUM_VAULT_USD_WITHDRAWL_VALUE;
     }
 }

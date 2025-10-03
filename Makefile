@@ -8,7 +8,9 @@ build :; forge build
 
 clean :; forge clean
 
-test :; forge test
+test :; forge test -vvvv
+
+coverage :; forge coverage
 
 install :; forge install smartcontractkit/chainlink-brownie-contracts@1.3.0
 
