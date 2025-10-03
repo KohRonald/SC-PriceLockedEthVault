@@ -10,6 +10,8 @@ clean :; forge clean
 
 test :; forge test -vvvv
 
+test-sepolia :; forge test --fork-url $(SEPOLIA_RPC_URL)
+
 coverage :; forge coverage
 
 install :; forge install smartcontractkit/chainlink-brownie-contracts@1.3.0
